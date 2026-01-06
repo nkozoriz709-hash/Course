@@ -510,6 +510,14 @@
                     notesUrl: "https://disk.yandex.by/i/VRe3JvD7tX8k5g",
                     duration: "1:32"
                 },
+                {
+                    id: 22,
+                    title: "Обособленные члены предложения",
+                    description: "",
+                    videoId: "XOX7vRq0UIg",
+                    notesUrl: "https://disk.yandex.by/i/KiQhuWqmSlTLeQ",
+                    duration: "1:33"
+                },
                 
             ]
         },
@@ -717,6 +725,14 @@
                     videoId: "oc51SM0pY2g", 
                     notesUrl: "",
                     duration: "1:21"
+                },
+                {
+                    id: 26,
+                    title: "Лексика. Грамматические и лексические синонимы",
+                    description: "",
+                    videoId: "etQvuSmuwRM", 
+                    notesUrl: "",
+                    duration: "1:28"
                 },
                 
             ]
