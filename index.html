@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <title>Онлайн Курсы</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>">
+</head>
+<body>
+
+    <!-- Индикатор загрузки -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Переключатель темы -->
+    <div class="theme-switcher">
+        <button id="theme-toggle" class="theme-toggle" aria-label="Переключить тему">
+            <i class="fas fa-moon"></i>
+            <i class="fas fa-sun"></i>
+            <span class="theme-ball"></span>
+        </button>
+    </div>
+
+    <!-- Кнопка личного кабинета -->
+    <div class="user-menu">
+        <button id="user-menu-btn" class="user-menu-btn" aria-label="Личный кабинет">
+            <i class="fas fa-user-circle"></i>
+            <span id="username-display" class="username-display"></span>
+        </button>
+    </div>
+
+    <div class="container">
+        <!-- Шапка сайта -->
+        <header>
+            <h1><i class="fas fa-graduation-cap"></i> Онлайн Курсы</h1>
+            <p class="subtitle">Изучайте языки с профессиональными преподавателями</p>
+        </header>
+
+        <!-- Контейнер для авторизации/регистрации -->
+        <div id="auth-container" class="auth-container">
+            <div class="auth-tabs">
+                <button id="login-tab" class="auth-tab active">Вход</button>
+                <button id="register-tab" class="auth-tab">Регистрация</button>
+            </div>
+            
+            <!-- Форма входа -->
+            <div id="login-form" class="auth-form active">
+                <h3><i class="fas fa-sign-in-alt"></i> Вход в личный кабинет</h3>
+                <div class="form-group">
+                    <label for="login-email"><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="login-email" placeholder="Введите ваш email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password"><i class="fas fa-lock"></i> Пароль</label>
+                    <div class="password-input-group">
+                        <input type="password" id="login-password" placeholder="Введите пароль" required>
+                        <button type="button" class="toggle-password-btn" data-target="login-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <button id="login-btn" class="auth-btn">
+                    <i class="fas fa-sign-in-alt"></i> Войти
+                </button>
+                <p class="auth-switch">
+                    Нет аккаунта? <a href="#" id="switch-to-register">Зарегистрироваться</a>
+                </p>
+                <div id="login-error" class="error-message"></div>
+            </div>
+            
+            <!-- Форма регистрации -->
+            <div id="register-form" class="auth-form">
+                <h3><i class="fas fa-user-plus"></i> Регистрация</h3>
+                <div class="form-group">
+                    <label for="register-name"><i class="fas fa-user"></i> Имя</label>
+                    <input type="text" id="register-name" placeholder="Введите ваше имя" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email"><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="register-email" placeholder="Введите ваш email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password"><i class="fas fa-lock"></i> Пароль</label>
+                    <div class="password-input-group">
+                        <input type="password" id="register-password" placeholder="Придумайте пароль (мин. 6 символов)" required>
+                        <button type="button" class="toggle-password-btn" data-target="register-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="register-confirm-password"><i class="fas fa-lock"></i> Подтвердите пароль</label>
+                    <div class="password-input-group">
+                        <input type="password" id="register-confirm-password" placeholder="Повторите пароль" required>
+                        <button type="button" class="toggle-password-btn" data-target="register-confirm-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <button id="register-btn" class="auth-btn">
+                    <i class="fas fa-user-plus"></i> Зарегистрироваться
+                </button>
+                <p class="auth-switch">
+                    Уже есть аккаунт? <a href="#" id="switch-to-login">Войти</a>
+                </p>
+                <div id="register-error" class="error-message"></div>
+                <div id="register-success" class="success-message"></div>
+            </div>
+        </div>
+
+        <!-- Контейнер для основного контента -->
+        <div id="main-content" class="main-content hidden">
+            <!-- Разделы курсов -->
+            <div class="language-selector">
+                <button id="russian-btn" class="lang-btn">
+                    <i class="fas fa-book"></i> <span class="btn-text">Русский язык</span>
+                    <span class="lock-icon"><i class="fas fa-lock"></i></span>
+                </button>
+                <button id="english-btn" class="lang-btn">
+                    <i class="fas fa-globe"></i> <span class="btn-text">Английский язык</span>
+                    <span class="lock-icon"><i class="fas fa-lock"></i></span>
+                </button>
+            </div>
+
+            <!-- Контейнер для уроков -->
+            <div class="lessons-container">
+                <h2 id="current-language">Выберите курс для просмотра уроков</h2>
+                <div id="lessons-list" class="lessons-list">
+                    <div class="select-course-message">
+                        <i class="fas fa-key"></i>
+                        <h3>Доступ к урокам защищен паролем</h3>
+                        <p>Выберите курс и введите пароль для просмотра уроков</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Модальное окно для ввода пароля -->
+            <div id="password-modal" class="password-modal hidden">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3><i class="fas fa-lock"></i> Требуется пароль</h3>
+                        <button id="close-modal" class="close-btn">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="modal-message">Введите пароль для доступа к курсу</p>
+                        <div class="password-input-group">
+                            <input type="password" id="password-input" placeholder="Введите пароль" autocomplete="off">
+                            <button id="toggle-password" class="toggle-password-btn">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <p class="password-hint">Подсказка: Пароль состоит из 5 цифр</p>
+                        <div id="password-error" class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span>Неверный пароль. Попробуйте снова.</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="cancel-password" class="cancel-btn">Отмена</button>
+                        <button id="submit-password" class="submit-btn">Войти</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Затемнение фона при открытом видео -->
+        <div id="video-overlay" class="video-overlay hidden"></div>
+
+        <!-- Плеер для видео -->
+        <div id="video-player" class="video-player hidden">
+            <div class="player-header">
+                <h3 id="lesson-title">Название урока</h3>
+                <button id="close-player" class="close-btn" aria-label="Закрыть плеер">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="video-wrapper">
+                <iframe id="youtube-video" width="560" height="315" 
+                        src="" 
+                        title="YouTube video player" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                        allowfullscreen
+                        loading="lazy">
+                </iframe>
+            </div>
+            
+            <div class="lesson-materials">
+                <h4 id="materials-title"><i class="fas fa-file-alt"></i> Материалы к уроку:</h4>
+                <a id="notes-link" href="#" target="_blank" class="notes-btn">
+                    <i class="fas fa-download"></i> Скачать конспект (PDF)
+                </a>
+                <button id="back-to-lessons" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> <span class="btn-text">Вернуться к списку уроков</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Модальное окно личного кабинета -->
+        <div id="user-modal" class="user-modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-user-circle"></i> Личный кабинет</h3>
+                    <button id="close-user-modal" class="close-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="user-details">
+                            <h4 id="user-modal-name"></h4>
+                            <p id="user-modal-email"></p>
+                            <p class="user-reg-date">Зарегистрирован: <span id="user-reg-date"></span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="trial-period">
+                        <h4><i class="fas fa-clock"></i> Пробный период</h4>
+                        <p class="trial-description">Попробуйте бесплатно первый урок каждого курса</p>
+                        <div class="trial-buttons">
+                            <button id="trial-russian-btn" class="trial-btn">
+                                <i class="fas fa-book"></i> Русский язык
+                            </button>
+                            <button id="trial-english-btn" class="trial-btn">
+                                <i class="fas fa-globe"></i> Английский язык
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="user-access">
+                        <h4><i class="fas fa-key"></i> Доступ к курсам</h4>
+                        <div class="access-list">
+                            <div class="access-item">
+                                <i class="fas fa-book"></i>
+                                <span>Русский язык:</span>
+                                <span class="access-status" id="russian-access">Заблокирован</span>
+                            </div>
+                            <div class="access-item">
+                                <i class="fas fa-globe"></i>
+                                <span>Английский язык:</span>
+                                <span class="access-status" id="english-access">Заблокирован</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="user-progress">
+                        <h4><i class="fas fa-chart-line"></i> Прогресс обучения</h4>
+                        <div class="progress-stats">
+                            <div class="progress-stat">
+                                <span class="stat-label">Русский язык:</span>
+                                <span class="stat-value" id="russian-progress">0%</span>
+                                <div class="stat-bar">
+                                    <div class="stat-progress" id="russian-progress-bar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="progress-stat">
+                                <span class="stat-label">Английский язык:</span>
+                                <span class="stat-value" id="english-progress">0%</span>
+                                <div class="stat-bar">
+                                    <div class="stat-progress" id="english-progress-bar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="logout-btn" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Выйти
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Подвал -->
+        <footer>
+            <p>© 2025 Онлайн Курсы. Все права защищены.</p>
+            <p class="contact">Свяжитесь с нами: image.stock1001@gmail.com</p>
+            <p class="admin-hint">Для получения паролей к курсам свяжитесь с администратором</p>
+        </footer>
+    </div>
+
+    <!-- Подключаем скрипт -->
+    <script src="script.js"></script>
+</body>
+</html>

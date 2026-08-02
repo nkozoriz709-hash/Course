@@ -1,0 +1,2541 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель | Онлайн Курсы</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================================
+           АДМИН-ПАНЕЛЬ СТИЛИ
+           ============================================================ */
+        :root {
+            --bg-body: #f0f4f9;
+            --bg-card: #ffffff;
+            --bg-sidebar: #1a1a2e;
+            --bg-header: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            --text-primary: #1a1a2e;
+            --text-secondary: #5a6a7a;
+            --text-light: #a0b0c0;
+            --text-white: #ffffff;
+            --border-color: #e8edf3;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.12);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-xs: 6px;
+            --transition: 0.25s ease;
+            --primary: #6c5ce7;
+            --primary-dark: #5a4bd1;
+            --primary-light: #a29bfe;
+            --success: #00b894;
+            --danger: #e17055;
+            --warning: #fdcb6e;
+            --info: #74b9ff;
+            --gradient-primary: linear-gradient(135deg, #6c5ce7 0%, #0984e3 100%);
+            --gradient-success: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            --gradient-danger: linear-gradient(135deg, #e17055 0%, #d63031 100%);
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 15px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg-body);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            padding: 20px;
+        }
+
+        /* БОКОВАЯ ПАНЕЛЬ */
+        .admin-sidebar {
+            width: 250px;
+            min-height: 100vh;
+            background: var(--bg-sidebar);
+            border-radius: var(--radius);
+            padding: 28px 20px;
+            display: flex;
+            flex-direction: column;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            flex-shrink: 0;
+            margin-right: 24px;
+            transition: var(--transition);
+        }
+
+        .admin-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .admin-sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .admin-sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            margin-bottom: 24px;
+        }
+
+        .sidebar-brand i {
+            font-size: 28px;
+            color: var(--primary-light);
+            background: rgba(108, 92, 231, 0.2);
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        .sidebar-brand span {
+            color: var(--text-white);
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .sidebar-brand small {
+            display: block;
+            color: var(--text-light);
+            font-size: 0.7rem;
+            font-weight: 400;
+            opacity: 0.7;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .sidebar-nav .nav-label {
+            color: var(--text-light);
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 12px 12px 6px;
+            opacity: 0.5;
+        }
+
+        .sidebar-nav button {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: transparent;
+            border: none;
+            border-radius: var(--radius-sm);
+            color: var(--text-light);
+            font-size: 0.9rem;
+            font-weight: 500;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            text-align: left;
+        }
+
+        .sidebar-nav button:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-white);
+        }
+
+        .sidebar-nav button.active {
+            background: rgba(108, 92, 231, 0.25);
+            color: var(--text-white);
+            box-shadow: inset 3px 0 0 var(--primary);
+        }
+
+        .sidebar-nav button i {
+            width: 20px;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .sidebar-nav button .badge {
+            margin-left: auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .sidebar-footer a,
+        .sidebar-footer button {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            border-radius: var(--radius-sm);
+            border: none;
+            background: transparent;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            font-weight: 500;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            text-align: left;
+            text-decoration: none;
+        }
+
+        .sidebar-footer a:hover,
+        .sidebar-footer button:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-white);
+        }
+
+        .sidebar-footer .logout-btn {
+            color: var(--danger);
+        }
+        .sidebar-footer .logout-btn:hover {
+            background: rgba(225, 112, 85, 0.15);
+            color: var(--danger);
+        }
+
+        /* ОСНОВНОЙ КОНТЕНТ */
+        .admin-main {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .admin-header {
+            background: var(--bg-header);
+            border-radius: var(--radius);
+            padding: 24px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .admin-header h1 {
+            color: var(--text-white);
+            font-size: 1.4rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-header h1 i {
+            color: var(--primary-light);
+        }
+
+        .admin-header .header-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+        }
+
+        .admin-header .header-info .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .admin-header .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .admin-header .header-actions a,
+        .admin-header .header-actions button {
+            padding: 8px 18px;
+            border-radius: var(--radius-xs);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.8rem;
+            font-weight: 500;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .admin-header .header-actions a:hover,
+        .admin-header .header-actions button:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+        }
+
+        /* СТАТИСТИКА */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-card .icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .stat-card .icon.purple {
+            background: rgba(108, 92, 231, 0.12);
+            color: var(--primary);
+        }
+        .stat-card .icon.green {
+            background: rgba(0, 184, 148, 0.12);
+            color: var(--success);
+        }
+        .stat-card .icon.orange {
+            background: rgba(253, 203, 110, 0.15);
+            color: #e17055;
+        }
+        .stat-card .icon.blue {
+            background: rgba(116, 185, 255, 0.12);
+            color: var(--info);
+        }
+
+        .stat-card .info .number {
+            font-size: 1.6rem;
+            font-weight: 800;
+            line-height: 1.2;
+            color: var(--text-primary);
+        }
+
+        .stat-card .info .label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* ВКЛАДКИ */
+        .tab-content {
+            display: none;
+            animation: fadeUp 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .toolbar .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--radius-xs);
+            font-size: 0.85rem;
+            font-weight: 600;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .toolbar .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        .toolbar .btn:active {
+            transform: scale(0.97);
+        }
+
+        .toolbar .btn-primary {
+            background: var(--gradient-primary);
+            color: #fff;
+            border: none;
+        }
+        .toolbar .btn-primary:hover {
+            box-shadow: 0 4px 16px rgba(108, 92, 231, 0.35);
+        }
+
+        .toolbar .btn-success {
+            background: var(--gradient-success);
+            color: #fff;
+            border: none;
+        }
+        .toolbar .btn-success:hover {
+            box-shadow: 0 4px 16px rgba(0, 184, 148, 0.35);
+        }
+
+        .toolbar .btn-danger {
+            background: var(--gradient-danger);
+            color: #fff;
+            border: none;
+        }
+        .toolbar .btn-danger:hover {
+            box-shadow: 0 4px 16px rgba(225, 112, 85, 0.35);
+        }
+
+        .toolbar .search-wrap {
+            position: relative;
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .toolbar .search-wrap input {
+            width: 100%;
+            padding: 10px 16px 10px 40px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xs);
+            font-size: 0.85rem;
+            font-family: var(--font);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .toolbar .search-wrap input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15);
+        }
+
+        .toolbar .search-wrap i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .toolbar .filter-group {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-card);
+            padding: 4px;
+            border-radius: var(--radius-xs);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .toolbar .filter-group button {
+            padding: 6px 14px;
+            border: none;
+            border-radius: var(--radius-xs);
+            font-size: 0.78rem;
+            font-weight: 600;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: var(--transition);
+            background: transparent;
+            color: var(--text-secondary);
+        }
+
+        .toolbar .filter-group button:hover {
+            background: var(--bg-body);
+        }
+
+        .toolbar .filter-group button.active {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        /* ТАБЛИЦА */
+        .table-wrap {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .table-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            min-width: 700px;
+        }
+
+        table thead {
+            background: var(--bg-body);
+        }
+
+        table th {
+            padding: 14px 18px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: var(--text-secondary);
+            border-bottom: 2px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        table td {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            vertical-align: middle;
+        }
+
+        table tbody tr:hover {
+            background: rgba(108, 92, 231, 0.02);
+        }
+
+        table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .table-actions .btn-icon {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: var(--radius-xs);
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            color: var(--text-secondary);
+        }
+
+        .table-actions .btn-icon:hover {
+            background: var(--bg-body);
+            color: var(--text-primary);
+            transform: scale(1.05);
+        }
+
+        .table-actions .btn-icon.edit:hover {
+            background: rgba(116, 185, 255, 0.15);
+            color: var(--info);
+        }
+        .table-actions .btn-icon.unlock:hover {
+            background: rgba(0, 184, 148, 0.15);
+            color: var(--success);
+        }
+        .table-actions .btn-icon.delete:hover {
+            background: rgba(225, 112, 85, 0.15);
+            color: var(--danger);
+        }
+        .table-actions .btn-icon.eye:hover {
+            background: rgba(108, 92, 231, 0.12);
+            color: var(--primary);
+        }
+
+        .badge-status {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .badge-status.unlocked {
+            background: rgba(0, 184, 148, 0.12);
+            color: var(--success);
+        }
+        .badge-status.locked {
+            background: rgba(225, 112, 85, 0.10);
+            color: var(--danger);
+        }
+        .badge-status.russian {
+            background: rgba(108, 92, 231, 0.12);
+            color: var(--primary);
+        }
+        .badge-status.english {
+            background: rgba(116, 185, 255, 0.12);
+            color: var(--info);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 48px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 2.8rem;
+            opacity: 0.3;
+            margin-bottom: 12px;
+            display: block;
+        }
+        .empty-state h4 {
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            padding: 16px 20px;
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+        }
+
+        .pagination button {
+            padding: 6px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xs);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            font-weight: 500;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .pagination button:hover {
+            background: var(--bg-body);
+            border-color: var(--primary);
+            color: var(--text-primary);
+        }
+
+        .pagination button.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .pagination button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* МОДАЛЬНЫЕ ОКНА */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(6px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.25s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-box {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 560px;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            transform: scale(0.96);
+            transition: transform 0.25s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+
+        .modal-box.large {
+            max-width: 780px;
+        }
+        .modal-box.small {
+            max-width: 420px;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .modal-header h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-header .close-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 50%;
+            background: var(--bg-body);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+        }
+
+        .modal-header .close-btn:hover {
+            background: rgba(225, 112, 85, 0.12);
+            color: var(--danger);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+            color: var(--text-primary);
+        }
+
+        .form-group label .hint {
+            font-weight: 400;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xs);
+            font-size: 0.9rem;
+            font-family: var(--font);
+            background: var(--bg-body);
+            color: var(--text-primary);
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.12);
+            background: var(--bg-card);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-row .full {
+            grid-column: 1 / -1;
+        }
+
+        .checkbox-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding-top: 6px;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 400;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .progress-inputs {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .progress-inputs label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 400;
+            font-size: 0.85rem;
+        }
+
+        .progress-inputs input[type="number"] {
+            width: 70px;
+            padding: 6px 10px;
+        }
+
+        .modal-footer .btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: var(--radius-xs);
+            font-size: 0.85rem;
+            font-weight: 600;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-footer .btn-secondary {
+            background: var(--bg-body);
+            color: var(--text-secondary);
+        }
+        .modal-footer .btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        .modal-footer .btn-primary {
+            background: var(--gradient-primary);
+            color: #fff;
+        }
+        .modal-footer .btn-primary:hover {
+            box-shadow: 0 4px 16px rgba(108, 92, 231, 0.3);
+        }
+
+        .modal-footer .btn-danger {
+            background: var(--gradient-danger);
+            color: #fff;
+        }
+        .modal-footer .btn-danger:hover {
+            box-shadow: 0 4px 16px rgba(225, 112, 85, 0.3);
+        }
+
+        /* УПРАВЛЕНИЕ УРОКАМИ ПОЛЬЗОВАТЕЛЯ */
+        .user-lessons-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .user-lessons-toolbar .lang-filter {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-body);
+            padding: 4px;
+            border-radius: var(--radius-xs);
+            border: 1px solid var(--border-color);
+        }
+
+        .user-lessons-toolbar .lang-filter button {
+            padding: 6px 16px;
+            border: none;
+            border-radius: var(--radius-xs);
+            font-size: 0.78rem;
+            font-weight: 600;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: var(--transition);
+            background: transparent;
+            color: var(--text-secondary);
+        }
+
+        .user-lessons-toolbar .lang-filter button:hover {
+            background: var(--bg-card);
+        }
+
+        .user-lessons-toolbar .lang-filter button.active {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .lessons-grid::-webkit-scrollbar {
+            width: 4px;
+        }
+        .lessons-grid::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 10px;
+        }
+
+        .lesson-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            border-radius: var(--radius-xs);
+            border: 1px solid var(--border-color);
+            background: var(--bg-body);
+            transition: var(--transition);
+            gap: 8px;
+        }
+
+        .lesson-item .name {
+            font-size: 0.82rem;
+            font-weight: 500;
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .lesson-item .status {
+            font-size: 0.7rem;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .lesson-item .status.unlocked {
+            background: rgba(0, 184, 148, 0.12);
+            color: var(--success);
+        }
+        .lesson-item .status.locked {
+            background: rgba(225, 112, 85, 0.10);
+            color: var(--danger);
+        }
+
+        .lesson-item .toggle-btn {
+            padding: 4px 12px;
+            border: none;
+            border-radius: var(--radius-xs);
+            font-size: 0.7rem;
+            font-weight: 600;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+
+        .lesson-item .toggle-btn.unlock {
+            background: var(--success);
+            color: #fff;
+        }
+        .lesson-item .toggle-btn.unlock:hover {
+            opacity: 0.85;
+        }
+
+        .lesson-item .toggle-btn.lock {
+            background: var(--danger);
+            color: #fff;
+        }
+        .lesson-item .toggle-btn.lock:hover {
+            opacity: 0.85;
+        }
+
+        /* НАСТРОЙКИ */
+        .settings-section {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .settings-section h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .settings-section.danger {
+            border-color: rgba(225, 112, 85, 0.3);
+            background: rgba(225, 112, 85, 0.03);
+        }
+
+        .settings-section.danger h3 {
+            color: var(--danger);
+        }
+
+        .settings-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .settings-row .full {
+            grid-column: 1 / -1;
+        }
+
+        .settings-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .settings-item label {
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .settings-item .input-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .settings-item .input-group input {
+            flex: 1;
+            padding: 8px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xs);
+            font-size: 0.85rem;
+            font-family: var(--font);
+            background: var(--bg-body);
+            color: var(--text-primary);
+            transition: var(--transition);
+        }
+
+        .settings-item .input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .settings-item .input-group .btn-save {
+            padding: 8px 16px;
+            border: none;
+            border-radius: var(--radius-xs);
+            background: var(--success);
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .settings-item .input-group .btn-save:hover {
+            opacity: 0.85;
+        }
+
+        .settings-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        /* TOAST */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .toast {
+            padding: 14px 20px;
+            border-radius: var(--radius-sm);
+            color: #fff;
+            font-weight: 500;
+            font-size: 0.85rem;
+            box-shadow: var(--shadow-lg);
+            animation: slideUp 0.35s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            backdrop-filter: blur(8px);
+        }
+
+        .toast.success {
+            background: var(--gradient-success);
+        }
+        .toast.error {
+            background: var(--gradient-danger);
+        }
+        .toast.warning {
+            background: linear-gradient(135deg, #fdcb6e, #f39c12);
+        }
+        .toast.info {
+            background: var(--gradient-primary);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .toast .toast-close {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-left: auto;
+            transition: var(--transition);
+            padding: 0 4px;
+        }
+
+        .toast .toast-close:hover {
+            color: #fff;
+            transform: scale(1.2);
+        }
+
+        /* ЗАГРУЗКА */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* АДАПТИВНОСТЬ */
+        @media (max-width: 1024px) {
+            body {
+                padding: 12px;
+                flex-direction: column;
+            }
+
+            .admin-sidebar {
+                width: 100%;
+                min-height: auto;
+                flex-direction: row;
+                flex-wrap: wrap;
+                padding: 16px 20px;
+                margin-right: 0;
+                margin-bottom: 16px;
+                position: static;
+                max-height: none;
+                border-radius: var(--radius);
+            }
+
+            .sidebar-brand {
+                padding-bottom: 0;
+                border-bottom: none;
+                margin-bottom: 0;
+                flex: 1;
+            }
+
+            .sidebar-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 2px;
+                flex: 1;
+            }
+
+            .sidebar-nav .nav-label {
+                display: none;
+            }
+
+            .sidebar-nav button {
+                padding: 8px 14px;
+                font-size: 0.8rem;
+                width: auto;
+            }
+
+            .sidebar-nav button .badge {
+                display: none;
+            }
+
+            .sidebar-footer {
+                display: flex;
+                gap: 6px;
+                padding-top: 0;
+                border-top: none;
+                margin-left: auto;
+            }
+
+            .sidebar-footer a,
+            .sidebar-footer button {
+                padding: 8px 14px;
+                width: auto;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-header {
+                padding: 18px 20px;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+
+            .admin-header .header-info {
+                justify-content: center;
+            }
+            .admin-header .header-actions {
+                justify-content: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .settings-row {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-box {
+                max-width: 100%;
+                margin: 10px;
+                max-height: 95vh;
+            }
+
+            .lessons-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .toolbar .filter-group {
+                align-self: flex-start;
+            }
+
+            table {
+                font-size: 0.78rem;
+                min-width: 600px;
+            }
+
+            table th,
+            table td {
+                padding: 10px 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-sidebar .sidebar-nav button span:not(.badge) {
+                display: none;
+            }
+
+            .admin-sidebar .sidebar-nav button i {
+                font-size: 1.1rem;
+                width: auto;
+            }
+
+            .admin-sidebar .sidebar-nav button {
+                padding: 10px 12px;
+            }
+
+            .sidebar-footer a span,
+            .sidebar-footer button span {
+                display: none;
+            }
+
+            .sidebar-footer a i,
+            .sidebar-footer button i {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ИНДИКАТОР ЗАГРУЗКИ -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- БОКОВАЯ ПАНЕЛЬ -->
+    <aside class="admin-sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <i class="fas fa-crown"></i>
+            <div>
+                <span>Админ-панель</span>
+                <small>Онлайн Курсы</small>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-label">Управление</div>
+            <button class="active" data-tab="users">
+                <i class="fas fa-users"></i>
+                <span>Пользователи</span>
+                <span class="badge" id="sidebar-users-count">0</span>
+            </button>
+            <button data-tab="lessons">
+                <i class="fas fa-book"></i>
+                <span>Уроки</span>
+                <span class="badge" id="sidebar-lessons-count">0</span>
+            </button>
+            <button data-tab="settings">
+                <i class="fas fa-sliders-h"></i>
+                <span>Настройки</span>
+            </button>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="index.html" title="На сайт">
+                <i class="fas fa-arrow-left"></i>
+                <span>На сайт</span>
+            </a>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Выйти</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <main class="admin-main">
+
+        <!-- Шапка -->
+        <header class="admin-header">
+            <h1><i class="fas fa-shield-alt"></i> Панель управления</h1>
+            <div class="header-info">
+                <span class="dot"></span>
+                <span>Система работает</span>
+                <span>|</span>
+                <span id="header-date"></span>
+            </div>
+            <div class="header-actions">
+                <a href="index.html"><i class="fas fa-external-link-alt"></i> На сайт</a>
+                <button id="refreshBtn"><i class="fas fa-sync"></i> Обновить</button>
+            </div>
+        </header>
+
+        <!-- Статистика -->
+        <section class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="icon purple"><i class="fas fa-users"></i></div>
+                <div class="info">
+                    <div class="number" id="statUsers">0</div>
+                    <div class="label">Всего пользователей</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="icon green"><i class="fas fa-book-open"></i></div>
+                <div class="info">
+                    <div class="number" id="statLessons">0</div>
+                    <div class="label">Всего уроков</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="icon orange"><i class="fas fa-unlock"></i></div>
+                <div class="info">
+                    <div class="number" id="statUnlocked">0</div>
+                    <div class="label">Разблокированных курсов</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="icon blue"><i class="fas fa-user-graduate"></i></div>
+                <div class="info">
+                    <div class="number" id="statActive">0</div>
+                    <div class="label">Активных пользователей</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ВКЛАДКА: ПОЛЬЗОВАТЕЛИ -->
+        <section class="tab-content active" id="tab-users">
+            <div class="toolbar">
+                <button class="btn btn-primary" id="addUserBtn"><i class="fas fa-user-plus"></i> Добавить</button>
+                <button class="btn btn-success" id="exportCsvBtn"><i class="fas fa-file-export"></i> CSV</button>
+                <div class="search-wrap">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchUsers" placeholder="Поиск по имени или email..." />
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Имя</th>
+                                <th>Email</th>
+                                <th>Пароль</th>
+                                <th>Регистрация</th>
+                                <th>Русский</th>
+                                <th>Английский</th>
+                                <th style="min-width:140px;">Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersBody">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="usersPagination"></div>
+            </div>
+        </section>
+
+        <!-- ВКЛАДКА: УРОКИ -->
+        <section class="tab-content" id="tab-lessons">
+            <div class="toolbar">
+                <button class="btn btn-primary" id="addLessonBtn"><i class="fas fa-plus-circle"></i> Добавить урок</button>
+                <div class="filter-group" id="lessonFilter">
+                    <button class="active" data-filter="all">Все</button>
+                    <button data-filter="russian">🇷🇺 Русский</button>
+                    <button data-filter="english">🇬🇧 Английский</button>
+                </div>
+                <button class="btn btn-success" id="syncLessonsBtn"><i class="fas fa-cloud-upload-alt"></i> Синхронизировать</button>
+            </div>
+
+            <div class="table-wrap">
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Курс</th>
+                                <th>Название</th>
+                                <th>ID видео</th>
+                                <th>Длит.</th>
+                                <th>Конспект</th>
+                                <th style="min-width:100px;">Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lessonsBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ВКЛАДКА: НАСТРОЙКИ -->
+        <section class="tab-content" id="tab-settings">
+            <div class="settings-section">
+                <h3><i class="fas fa-key"></i> Пароли курсов</h3>
+                <div class="settings-row">
+                    <div class="settings-item">
+                        <label>Русский язык</label>
+                        <div class="input-group">
+                            <input type="text" id="setRussianPass" placeholder="Пароль для русского курса" />
+                            <button class="btn-save" data-setting="russianPassword"><i class="fas fa-save"></i></button>
+                        </div>
+                    </div>
+                    <div class="settings-item">
+                        <label>Английский язык</label>
+                        <div class="input-group">
+                            <input type="text" id="setEnglishPass" placeholder="Пароль для английского курса" />
+                            <button class="btn-save" data-setting="englishPassword"><i class="fas fa-save"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section danger">
+                <h3><i class="fas fa-exclamation-triangle"></i> Управление данными</h3>
+                <div class="settings-actions">
+                    <button class="btn btn-success" id="exportBackupBtn"><i class="fas fa-download"></i> Бэкап (JSON)</button>
+                    <button class="btn btn-danger" id="clearAllBtn"><i class="fas fa-trash"></i> Очистить всё</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- МОДАЛЬНОЕ ОКНО: ПОЛЬЗОВАТЕЛЬ -->
+    <div class="modal-overlay" id="userModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="userModalTitle"><i class="fas fa-user-plus"></i> Добавить пользователя</h3>
+                <button class="close-btn" data-close="userModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="userForm" autocomplete="off">
+                    <input type="hidden" id="userFormId" />
+                    <div class="form-group">
+                        <label>Имя</label>
+                        <input type="text" id="userFormName" placeholder="Введите имя" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="userFormEmail" placeholder="Введите email" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Пароль <span class="hint">(оставьте пустым, чтобы не менять)</span></label>
+                        <input type="text" id="userFormPass" placeholder="Придумайте пароль" />
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Доступы</label>
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" id="userFormRussian" /> Русский</label>
+                                <label><input type="checkbox" id="userFormEnglish" /> Английский</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Прогресс</label>
+                            <div class="progress-inputs">
+                                <label>Рус: <input type="number" id="userFormRusProg" min="0" max="100" value="0" />%</label>
+                                <label>Анг: <input type="number" id="userFormEngProg" min="0" max="100" value="0" />%</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-close="userModal">Отмена</button>
+                <button class="btn btn-primary" id="saveUserBtn"><i class="fas fa-save"></i> Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО: УРОК -->
+    <div class="modal-overlay" id="lessonModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="lessonModalTitle"><i class="fas fa-plus-circle"></i> Добавить урок</h3>
+                <button class="close-btn" data-close="lessonModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="lessonForm">
+                    <input type="hidden" id="lessonFormId" />
+                    <div class="form-group">
+                        <label>Курс</label>
+                        <select id="lessonFormLang">
+                            <option value="russian">Русский язык</option>
+                            <option value="english">Английский язык</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Название урока</label>
+                        <input type="text" id="lessonFormTitle" placeholder="Введите название" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Описание</label>
+                        <textarea id="lessonFormDesc" rows="2" placeholder="Краткое описание"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>ID видео (YouTube)</label>
+                            <input type="text" id="lessonFormVideo" placeholder="Напр. MOOxkGH2nto" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Длительность</label>
+                            <input type="text" id="lessonFormDuration" placeholder="Напр. 1:32" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Ссылка на конспект</label>
+                        <input type="text" id="lessonFormNotes" placeholder="Ссылка на PDF или Яндекс.Диск" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-close="lessonModal">Отмена</button>
+                <button class="btn btn-primary" id="saveLessonBtn"><i class="fas fa-save"></i> Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО: ПОДТВЕРЖДЕНИЕ -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal-box small">
+            <div class="modal-header">
+                <h3><i class="fas fa-exclamation-triangle" style="color:var(--danger);"></i> Подтверждение</h3>
+                <button class="close-btn" data-close="confirmModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage" style="font-size:0.95rem;line-height:1.5;">Вы уверены?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-close="confirmModal">Отмена</button>
+                <button class="btn btn-danger" id="confirmActionBtn"><i class="fas fa-check"></i> Подтвердить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST КОНТЕЙНЕР -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ============================================================
+    СКРИПТ
+    ============================================================ -->
+    <script>
+        (function() {
+            'use strict';
+
+            // ============================================================
+            // КОНФИГУРАЦИЯ JSONBIN
+            // ============================================================
+            const JSONBIN_CONFIG = {
+                binId: '6a6fc99dda38895dfeb12e33',
+                apiKey: '$2a$10$Q7f3EYrK6RyG37RtKdGbEuinxBtsHPBttKVALqQNjIBNjmub5W2y2',
+                baseUrl: 'https://api.jsonbin.io/v3/b'
+            };
+
+            // ============================================================
+            // РАБОТА С JSONBIN
+            // ============================================================
+            const DB = {
+                async load() {
+                    try {
+                        const response = await fetch(`${JSONBIN_CONFIG.baseUrl}/${JSONBIN_CONFIG.binId}/latest`, {
+                            headers: { 'X-Master-Key': JSONBIN_CONFIG.apiKey }
+                        });
+                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                        const data = await response.json();
+                        return data.record;
+                    } catch (error) {
+                        console.error('❌ Ошибка загрузки данных:', error);
+                        throw error;
+                    }
+                },
+
+                async save(data) {
+                    try {
+                        const response = await fetch(`${JSONBIN_CONFIG.baseUrl}/${JSONBIN_CONFIG.binId}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Master-Key': JSONBIN_CONFIG.apiKey
+                            },
+                            body: JSON.stringify(data)
+                        });
+                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                        return await response.json();
+                    } catch (error) {
+                        console.error('❌ Ошибка сохранения данных:', error);
+                        throw error;
+                    }
+                }
+            };
+
+            // ============================================================
+            // СОСТОЯНИЕ
+            // ============================================================
+            const STATE = {
+                data: null,
+                users: [],
+                lessons: [],
+                settings: {},
+                currentPage: 1,
+                searchQuery: '',
+                lessonFilter: 'all',
+                confirmCallback: null
+            };
+
+            // ============================================================
+            // DOM ССЫЛКИ
+            // ============================================================
+            const $ = id => document.getElementById(id);
+            const $$ = sel => document.querySelectorAll(sel);
+
+            const DOM = {
+                loadingOverlay: $('loadingOverlay'),
+                statUsers: $('statUsers'),
+                statLessons: $('statLessons'),
+                statUnlocked: $('statUnlocked'),
+                statActive: $('statActive'),
+                sidebarUsers: $('sidebar-users-count'),
+                sidebarLessons: $('sidebar-lessons-count'),
+                usersBody: $('usersBody'),
+                usersPagination: $('usersPagination'),
+                searchUsers: $('searchUsers'),
+                addUserBtn: $('addUserBtn'),
+                exportCsvBtn: $('exportCsvBtn'),
+                lessonsBody: $('lessonsBody'),
+                addLessonBtn: $('addLessonBtn'),
+                lessonFilter: $('lessonFilter'),
+                syncLessonsBtn: $('syncLessonsBtn'),
+                setRussianPass: $('setRussianPass'),
+                setEnglishPass: $('setEnglishPass'),
+                exportBackupBtn: $('exportBackupBtn'),
+                clearAllBtn: $('clearAllBtn'),
+                userModal: $('userModal'),
+                lessonModal: $('lessonModal'),
+                confirmModal: $('confirmModal'),
+                userModalTitle: $('userModalTitle'),
+                userFormId: $('userFormId'),
+                userFormName: $('userFormName'),
+                userFormEmail: $('userFormEmail'),
+                userFormPass: $('userFormPass'),
+                userFormRussian: $('userFormRussian'),
+                userFormEnglish: $('userFormEnglish'),
+                userFormRusProg: $('userFormRusProg'),
+                userFormEngProg: $('userFormEngProg'),
+                saveUserBtn: $('saveUserBtn'),
+                lessonModalTitle: $('lessonModalTitle'),
+                lessonFormId: $('lessonFormId'),
+                lessonFormLang: $('lessonFormLang'),
+                lessonFormTitle: $('lessonFormTitle'),
+                lessonFormDesc: $('lessonFormDesc'),
+                lessonFormVideo: $('lessonFormVideo'),
+                lessonFormDuration: $('lessonFormDuration'),
+                lessonFormNotes: $('lessonFormNotes'),
+                saveLessonBtn: $('saveLessonBtn'),
+                confirmMessage: $('confirmMessage'),
+                confirmActionBtn: $('confirmActionBtn'),
+                toastContainer: $('toastContainer'),
+                refreshBtn: $('refreshBtn'),
+                logoutBtn: $('logoutBtn'),
+                headerDate: $('header-date')
+            };
+
+            // ============================================================
+            // УТИЛИТЫ
+            // ============================================================
+            function escapeHTML(str) {
+                if (!str) return '';
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            }
+
+            function formatDate(d) {
+                if (!d) return '—';
+                try {
+                    return new Date(d).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                } catch { return d; }
+            }
+
+            function decodePass(encoded) {
+                try { return decodeURIComponent(atob(encoded)); } catch { return encoded || '—'; }
+            }
+
+            function hashPassword(password) {
+                return btoa(encodeURIComponent(password));
+            }
+
+            function showLoading(show) {
+                DOM.loadingOverlay.classList.toggle('active', show);
+            }
+
+            function showToast(message, type = 'info') {
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                const icons = {
+                    success: 'fa-check-circle',
+                    error: 'fa-exclamation-circle',
+                    warning: 'fa-exclamation-triangle',
+                    info: 'fa-info-circle'
+                };
+                toast.innerHTML = `
+                    <i class="fas ${icons[type] || icons.info}"></i>
+                    <span>${escapeHTML(message)}</span>
+                    <button class="toast-close"><i class="fas fa-times"></i></button>
+                `;
+                DOM.toastContainer.appendChild(toast);
+                const close = toast.querySelector('.toast-close');
+                close.addEventListener('click', () => toast.remove());
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.style.opacity = '0';
+                        toast.style.transform = 'translateX(20px)';
+                        toast.style.transition = '0.3s';
+                        setTimeout(() => toast.remove(), 300);
+                    }
+                }, 4500);
+            }
+
+            function openModal(id) {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('active');
+            }
+
+            function closeModal(id) {
+                const el = document.getElementById(id);
+                if (el) el.classList.remove('active');
+            }
+
+            document.querySelectorAll('.modal-overlay').forEach(m => {
+                m.addEventListener('click', function(e) {
+                    if (e.target === this) this.classList.remove('active');
+                });
+            });
+
+            document.querySelectorAll('[data-close]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    closeModal(this.dataset.close);
+                });
+            });
+
+            function confirmAction(message, callback) {
+                DOM.confirmMessage.textContent = message;
+                STATE.confirmCallback = callback;
+                openModal('confirmModal');
+            }
+
+            DOM.confirmActionBtn.addEventListener('click', function() {
+                if (STATE.confirmCallback) {
+                    STATE.confirmCallback();
+                    STATE.confirmCallback = null;
+                }
+                closeModal('confirmModal');
+            });
+
+            // ============================================================
+            // ЗАГРУЗКА ДАННЫХ
+            // ============================================================
+            async function loadAllData() {
+                showLoading(true);
+                try {
+                    STATE.data = await DB.load();
+                    STATE.users = Object.values(STATE.data.users || {});
+                    STATE.lessons = STATE.data.lessons || [];
+                    STATE.settings = STATE.data.settings || {};
+                    renderStats();
+                    renderUsers();
+                    renderLessons();
+                    fillSettings();
+                    updateSidebarCounts();
+                    DOM.headerDate.textContent = new Date().toLocaleString('ru-RU', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    console.log('✅ Данные загружены, уроков:', STATE.lessons.length);
+                } catch (error) {
+                    console.error('❌ Ошибка загрузки:', error);
+                    showToast('Ошибка загрузки данных', 'error');
+                } finally {
+                    showLoading(false);
+                }
+            }
+
+            function updateSidebarCounts() {
+                DOM.sidebarUsers.textContent = STATE.users.length;
+                DOM.sidebarLessons.textContent = STATE.lessons.length;
+            }
+
+            // ============================================================
+            // СТАТИСТИКА
+            // ============================================================
+            function renderStats() {
+                const total = STATE.users.length;
+                const lessons = STATE.lessons.length;
+                let rus = 0,
+                    eng = 0;
+                STATE.users.forEach(u => {
+                    if (u.unlockedLanguages?.russian) rus++;
+                    if (u.unlockedLanguages?.english) eng++;
+                });
+                const active = STATE.users.filter(u => u.unlockedLanguages?.russian || u.unlockedLanguages?.english)
+                    .length;
+
+                DOM.statUsers.textContent = total;
+                DOM.statLessons.textContent = lessons;
+                DOM.statUnlocked.textContent = rus + eng;
+                DOM.statActive.textContent = active;
+                updateSidebarCounts();
+            }
+
+            // ============================================================
+            // ПОЛЬЗОВАТЕЛИ
+            // ============================================================
+            function renderUsers() {
+                const q = STATE.searchQuery.toLowerCase();
+                let filtered = STATE.users.filter(u =>
+                    u.name.toLowerCase().includes(q) ||
+                    u.email.toLowerCase().includes(q)
+                );
+
+                const total = filtered.length;
+                const totalPages = Math.ceil(total / 10) || 1;
+                if (STATE.currentPage > totalPages) STATE.currentPage = totalPages;
+
+                const start = (STATE.currentPage - 1) * 10;
+                const page = filtered.slice(start, start + 10);
+
+                if (!page.length) {
+                    DOM.usersBody.innerHTML =
+                        `<tr><td colspan="7"><div class="empty-state"><i class="fas fa-users"></i><h4>Пользователи не найдены</h4></div></td></tr>`;
+                } else {
+                    DOM.usersBody.innerHTML = page.map(u => `
+                        <tr>
+                            <td><strong>${escapeHTML(u.name)}</strong></td>
+                            <td><span class="text-truncate" title="${escapeHTML(u.email)}">${escapeHTML(u.email)}</span></td>
+                            <td>
+                                <button class="btn-icon eye" onclick="API.viewPassword('${u.email}')" title="Показать пароль">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </td>
+                            <td>${formatDate(u.registeredAt)}</td>
+                            <td>${u.unlockedLanguages?.russian ? '<span class="badge-status unlocked">Открыт</span>' : '<span class="badge-status locked">Закрыт</span>'}</td>
+                            <td>${u.unlockedLanguages?.english ? '<span class="badge-status unlocked">Открыт</span>' : '<span class="badge-status locked">Закрыт</span>'}</td>
+                            <td>
+                                <div class="table-actions">
+                                    <button class="btn-icon edit" onclick="API.editUser('${u.email}')" title="Редактировать"><i class="fas fa-pen"></i></button>
+                                    <button class="btn-icon unlock" onclick="API.toggleAccess('${u.email}','russian')" title="Переключить Русский"><i class="fas fa-language"></i></button>
+                                    <button class="btn-icon delete" onclick="API.deleteUser('${u.email}')" title="Удалить"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+
+                let pagHTML = '';
+                if (totalPages > 1) {
+                    pagHTML +=
+                        `<button onclick="API.goPage(${STATE.currentPage - 1})" ${STATE.currentPage===1?'disabled':''}><i class="fas fa-chevron-left"></i></button>`;
+                    for (let i = 1; i <= totalPages; i++) {
+                        pagHTML +=
+                            `<button onclick="API.goPage(${i})" class="${i===STATE.currentPage?'active':''}">${i}</button>`;
+                    }
+                    pagHTML +=
+                        `<button onclick="API.goPage(${STATE.currentPage + 1})" ${STATE.currentPage===totalPages?'disabled':''}><i class="fas fa-chevron-right"></i></button>`;
+                }
+                DOM.usersPagination.innerHTML = pagHTML;
+            }
+
+            // ============================================================
+            // УРОКИ (СИНХРОНИЗАЦИЯ С JSONBIN)
+            // ============================================================
+            function renderLessons() {
+                const filter = STATE.lessonFilter;
+                let filtered = STATE.lessons;
+                if (filter !== 'all') filtered = filtered.filter(l => l.language === filter);
+
+                if (!filtered.length) {
+                    DOM.lessonsBody.innerHTML =
+                        `<tr><td colspan="7"><div class="empty-state"><i class="fas fa-book"></i><h4>Уроки не найдены</h4></div></td></tr>`;
+                    return;
+                }
+
+                DOM.lessonsBody.innerHTML = filtered.map((l, i) => `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td><span class="badge-status ${l.language}">${l.language === 'russian' ? '🇷🇺 Русский' : '🇬🇧 Английский'}</span></td>
+                        <td><strong>${escapeHTML(l.title)}</strong></td>
+                        <td><code>${escapeHTML(l.videoId || '—')}</code></td>
+                        <td>${l.duration || '—'}</td>
+                        <td>${l.notesUrl ? '<i class="fas fa-check" style="color:var(--success)"></i>' : '<i class="fas fa-times" style="color:var(--danger)"></i>'}</td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn-icon edit" onclick="API.editLesson(${i})" title="Редактировать"><i class="fas fa-pen"></i></button>
+                                <button class="btn-icon delete" onclick="API.deleteLesson(${i})" title="Удалить"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            // ============================================================
+            // API
+            // ============================================================
+            const API = {
+                // ПОЛЬЗОВАТЕЛИ
+                async deleteUser(email) {
+                    confirmAction(`Удалить пользователя "${email}"?`, async () => {
+                        const data = await DB.load();
+                        delete data.users[email];
+                        await DB.save(data);
+                        STATE.data = data;
+                        STATE.users = Object.values(data.users);
+                        renderStats();
+                        renderUsers();
+                        showToast('Пользователь удалён', 'success');
+                    });
+                },
+
+                editUser(email) {
+                    const u = STATE.data.users[email];
+                    if (!u) { showToast('Пользователь не найден', 'error'); return; }
+                    DOM.userFormId.value = email;
+                    DOM.userFormName.value = u.name;
+                    DOM.userFormEmail.value = u.email;
+                    DOM.userFormPass.value = '';
+                    DOM.userFormPass.placeholder = 'Оставьте пустым, чтобы не менять';
+                    DOM.userFormRussian.checked = !!u.unlockedLanguages?.russian;
+                    DOM.userFormEnglish.checked = !!u.unlockedLanguages?.english;
+                    DOM.userFormRusProg.value = u.progress?.russian || 0;
+                    DOM.userFormEngProg.value = u.progress?.english || 0;
+                    DOM.userModalTitle.innerHTML = '<i class="fas fa-pen"></i> Редактировать пользователя';
+                    openModal('userModal');
+                },
+
+                async toggleAccess(email, lang) {
+                    const data = await DB.load();
+                    if (!data.users[email]) { showToast('Пользователь не найден', 'error'); return; }
+                    if (!data.users[email].unlockedLanguages) data.users[email].unlockedLanguages = { russian: false,
+                        english: false };
+                    data.users[email].unlockedLanguages[lang] = !data.users[email].unlockedLanguages[lang];
+                    await DB.save(data);
+                    STATE.data = data;
+                    STATE.users = Object.values(data.users);
+                    renderStats();
+                    renderUsers();
+                    showToast(`${lang} ${data.users[email].unlockedLanguages[lang] ? 'разблокирован' : 'заблокирован'}`,
+                        'success');
+                },
+
+                viewPassword(email) {
+                    const u = STATE.data.users[email];
+                    if (!u) { showToast('Пользователь не найден', 'error'); return; }
+                    const pass = decodePass(u.password);
+                    showToast(`Пароль для ${u.name}: ${pass}`, 'info');
+                },
+
+                goPage(page) {
+                    const total = STATE.users.length;
+                    const totalPages = Math.ceil(total / 10) || 1;
+                    if (page < 1 || page > totalPages) return;
+                    STATE.currentPage = page;
+                    renderUsers();
+                },
+
+                // УРОКИ (СОХРАНЕНИЕ В JSONBIN)
+                async saveLessonsToServer() {
+                    const data = await DB.load();
+                    data.lessons = STATE.lessons;
+                    await DB.save(data);
+                    STATE.data = data;
+                    showToast('Уроки сохранены на сервер', 'success');
+                },
+
+                async addLesson(lessonData) {
+                    const newLesson = {
+                        id: STATE.lessons.length > 0 ? Math.max(...STATE.lessons.map(l => l.id)) + 1 : 1,
+                        title: lessonData.title.trim(),
+                        description: lessonData.description || '',
+                        videoId: lessonData.videoId.trim(),
+                        duration: lessonData.duration || '',
+                        notesUrl: lessonData.notesUrl || '',
+                        language: lessonData.language
+                    };
+
+                    STATE.lessons.push(newLesson);
+                    await this.saveLessonsToServer();
+                    renderLessons();
+                    renderStats();
+                    showToast('Урок добавлен', 'success');
+                    return true;
+                },
+
+                async updateLesson(index, lessonData) {
+                    if (index < 0 || index >= STATE.lessons.length) {
+                        showToast('Урок не найден', 'error');
+                        return false;
+                    }
+
+                    STATE.lessons[index] = {
+                        ...STATE.lessons[index],
+                        title: lessonData.title.trim(),
+                        description: lessonData.description || '',
+                        videoId: lessonData.videoId.trim(),
+                        duration: lessonData.duration || '',
+                        notesUrl: lessonData.notesUrl || '',
+                        language: lessonData.language
+                    };
+
+                    await this.saveLessonsToServer();
+                    renderLessons();
+                    renderStats();
+                    showToast('Урок обновлён', 'success');
+                    return true;
+                },
+
+                async deleteLesson(index) {
+                    if (index < 0 || index >= STATE.lessons.length) {
+                        showToast('Урок не найден', 'error');
+                        return;
+                    }
+
+                    const title = STATE.lessons[index].title;
+                    confirmAction(`Удалить урок "${title}"?`, async () => {
+                        STATE.lessons.splice(index, 1);
+                        await this.saveLessonsToServer();
+                        renderLessons();
+                        renderStats();
+                        showToast('Урок удалён', 'success');
+                    });
+                },
+
+                editLesson(index) {
+                    const l = STATE.lessons[index];
+                    if (!l) { showToast('Урок не найден', 'error'); return; }
+                    DOM.lessonFormId.value = index;
+                    DOM.lessonFormLang.value = l.language || 'russian';
+                    DOM.lessonFormTitle.value = l.title || '';
+                    DOM.lessonFormDesc.value = l.description || '';
+                    DOM.lessonFormVideo.value = l.videoId || '';
+                    DOM.lessonFormDuration.value = l.duration || '';
+                    DOM.lessonFormNotes.value = l.notesUrl || '';
+                    DOM.lessonModalTitle.innerHTML = '<i class="fas fa-pen"></i> Редактировать урок';
+                    openModal('lessonModal');
+                },
+
+                // СИНХРОНИЗАЦИЯ
+                async syncLessons() {
+                    showLoading(true);
+                    try {
+                        const data = await DB.load();
+                        STATE.lessons = data.lessons || [];
+                        STATE.data = data;
+                        renderLessons();
+                        renderStats();
+                        showToast('Уроки синхронизированы с сервером', 'success');
+                    } catch (error) {
+                        showToast('Ошибка синхронизации: ' + error.message, 'error');
+                    } finally {
+                        showLoading(false);
+                    }
+                },
+
+                refresh() {
+                    loadAllData();
+                    showToast('Данные обновлены', 'success');
+                },
+
+                logout() {
+                    localStorage.removeItem('admin_session');
+                    window.location.href = 'index.html';
+                }
+            };
+
+            // ============================================================
+            // СОБЫТИЯ
+            // ============================================================
+
+            // Вкладки
+            document.querySelectorAll('.sidebar-nav button[data-tab]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.sidebar-nav button[data-tab]').forEach(b => b.classList.remove(
+                        'active'));
+                    this.classList.add('active');
+                    document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+                    document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+                });
+            });
+
+            // Добавить пользователя
+            DOM.addUserBtn.addEventListener('click', function() {
+                DOM.userFormId.value = '';
+                DOM.userFormName.value = '';
+                DOM.userFormEmail.value = '';
+                DOM.userFormPass.value = '';
+                DOM.userFormPass.placeholder = 'Придумайте пароль';
+                DOM.userFormRussian.checked = false;
+                DOM.userFormEnglish.checked = false;
+                DOM.userFormRusProg.value = 0;
+                DOM.userFormEngProg.value = 0;
+                DOM.userModalTitle.innerHTML = '<i class="fas fa-user-plus"></i> Добавить пользователя';
+                openModal('userModal');
+            });
+
+            // Сохранить пользователя
+            DOM.saveUserBtn.addEventListener('click', async function() {
+                const id = DOM.userFormId.value;
+                const name = DOM.userFormName.value.trim();
+                const email = DOM.userFormEmail.value.trim();
+                const pass = DOM.userFormPass.value.trim();
+                const russian = DOM.userFormRussian.checked;
+                const english = DOM.userFormEnglish.checked;
+                const rusProg = parseInt(DOM.userFormRusProg.value) || 0;
+                const engProg = parseInt(DOM.userFormEngProg.value) || 0;
+
+                if (!name || !email) { showToast('Заполните имя и email', 'error'); return; }
+                if (!email.includes('@')) { showToast('Некорректный email', 'error'); return; }
+
+                showLoading(true);
+                try {
+                    const data = await DB.load();
+
+                    if (id) {
+                        if (!data.users[id]) { showToast('Пользователь не найден', 'error'); return; }
+                        const u = data.users[id];
+                        u.name = name;
+                        if (pass) u.password = hashPassword(pass);
+                        if (email !== id) {
+                            if (data.users[email]) { showToast('Email уже занят', 'error'); return; }
+                            delete data.users[id];
+                            u.email = email;
+                            data.users[email] = u;
+                        } else {
+                            data.users[id] = u;
+                        }
+                        if (!u.unlockedLanguages) u.unlockedLanguages = { russian: false, english: false };
+                        u.unlockedLanguages.russian = russian;
+                        u.unlockedLanguages.english = english;
+                        if (!u.progress) u.progress = {};
+                        u.progress.russian = rusProg;
+                        u.progress.english = engProg;
+                    } else {
+                        if (data.users[email]) { showToast('Пользователь уже существует', 'error'); return; }
+                        if (!pass || pass.length < 6) { showToast('Пароль минимум 6 символов', 'error'); return; }
+                        data.users[email] = {
+                            id: 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+                            name: name,
+                            email: email,
+                            password: hashPassword(pass),
+                            registeredAt: new Date().toISOString(),
+                            unlockedLanguages: { russian: russian, english: english },
+                            progress: { russian: rusProg, english: engProg },
+                            lessonProgress: { russian: {}, english: {} }
+                        };
+                    }
+
+                    await DB.save(data);
+                    STATE.data = data;
+                    STATE.users = Object.values(data.users);
+                    closeModal('userModal');
+                    renderStats();
+                    renderUsers();
+                    showToast(id ? 'Пользователь обновлён' : 'Пользователь добавлен', 'success');
+                } catch (error) {
+                    showToast('Ошибка: ' + error.message, 'error');
+                } finally {
+                    showLoading(false);
+                }
+            });
+
+            // Добавить урок
+            DOM.addLessonBtn.addEventListener('click', function() {
+                DOM.lessonFormId.value = '';
+                DOM.lessonFormLang.value = 'russian';
+                DOM.lessonFormTitle.value = '';
+                DOM.lessonFormDesc.value = '';
+                DOM.lessonFormVideo.value = '';
+                DOM.lessonFormDuration.value = '';
+                DOM.lessonFormNotes.value = '';
+                DOM.lessonModalTitle.innerHTML = '<i class="fas fa-plus-circle"></i> Добавить урок';
+                openModal('lessonModal');
+            });
+
+            // Сохранить урок
+            DOM.saveLessonBtn.addEventListener('click', async function() {
+                const id = DOM.lessonFormId.value;
+                const language = DOM.lessonFormLang.value;
+                const title = DOM.lessonFormTitle.value.trim();
+                const description = DOM.lessonFormDesc.value.trim();
+                const videoId = DOM.lessonFormVideo.value.trim();
+                const duration = DOM.lessonFormDuration.value.trim();
+                const notesUrl = DOM.lessonFormNotes.value.trim();
+
+                if (!title || !videoId) { showToast('Заполните название и ID видео', 'error'); return; }
+
+                showLoading(true);
+                try {
+                    if (id !== '') {
+                        await API.updateLesson(parseInt(id), { language, title, description, videoId, duration,
+                            notesUrl });
+                    } else {
+                        await API.addLesson({ language, title, description, videoId, duration, notesUrl });
+                    }
+                    closeModal('lessonModal');
+                } catch (error) {
+                    showToast('Ошибка: ' + error.message, 'error');
+                } finally {
+                    showLoading(false);
+                }
+            });
+
+            // Фильтр уроков
+            DOM.lessonFilter.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    DOM.lessonFilter.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    STATE.lessonFilter = this.dataset.filter;
+                    renderLessons();
+                });
+            });
+
+            // Синхронизация уроков
+            DOM.syncLessonsBtn.addEventListener('click', function() {
+                API.syncLessons();
+            });
+
+            // Поиск пользователей
+            DOM.searchUsers.addEventListener('input', function() {
+                STATE.searchQuery = this.value;
+                STATE.currentPage = 1;
+                renderUsers();
+            });
+
+            // Настройки: сохранение паролей
+            document.querySelectorAll('.settings-item .btn-save').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    const key = this.dataset.setting;
+                    const input = this.closest('.input-group').querySelector('input');
+                    if (input) {
+                        showLoading(true);
+                        try {
+                            const data = await DB.load();
+                            data.settings[key] = input.value.trim();
+                            await DB.save(data);
+                            STATE.data = data;
+                            STATE.settings = data.settings;
+                            showToast('Настройка сохранена', 'success');
+                        } catch (error) {
+                            showToast('Ошибка: ' + error.message, 'error');
+                        } finally {
+                            showLoading(false);
+                        }
+                    }
+                });
+            });
+
+            // Экспорт CSV
+            DOM.exportCsvBtn.addEventListener('click', function() {
+                if (!STATE.users.length) { showToast('Нет пользователей для экспорта', 'warning'); return; }
+                let csv = 'Имя,Email,Пароль,Регистрация,Русский,Английский,Прогресс Рус,Прогресс Анг\n';
+                STATE.users.forEach(u => {
+                    const pass = decodePass(u.password);
+                    csv +=
+                        `${u.name},${u.email},${pass},${formatDate(u.registeredAt)},${u.unlockedLanguages?.russian?'Да':'Нет'},${u.unlockedLanguages?.english?'Да':'Нет'},${u.progress?.russian||0}%,${u.progress?.english||0}%\n`;
+                });
+                const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `users_${new Date().toISOString().slice(0,10)}.csv`;
+                link.click();
+                showToast('Экспорт выполнен', 'success');
+            });
+
+            // Бэкап
+            DOM.exportBackupBtn.addEventListener('click', async function() {
+                showLoading(true);
+                try {
+                    const data = await DB.load();
+                    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = `backup_${new Date().toISOString().slice(0,10)}.json`;
+                    link.click();
+                    showToast('Бэкап создан', 'success');
+                } catch (error) {
+                    showToast('Ошибка: ' + error.message, 'error');
+                } finally {
+                    showLoading(false);
+                }
+            });
+
+            // Очистить всё
+            DOM.clearAllBtn.addEventListener('click', function() {
+                confirmAction('Удалить ВСЕ данные? Это действие необратимо!', async () => {
+                    showLoading(true);
+                    try {
+                        const data = await DB.load();
+                        data.users = {};
+                        data.lessons = [];
+                        await DB.save(data);
+                        STATE.data = data;
+                        STATE.users = [];
+                        STATE.lessons = [];
+                        renderStats();
+                        renderUsers();
+                        renderLessons();
+                        showToast('Все данные очищены', 'warning');
+                    } catch (error) {
+                        showToast('Ошибка: ' + error.message, 'error');
+                    } finally {
+                        showLoading(false);
+                    }
+                });
+            });
+
+            // Обновить
+            DOM.refreshBtn.addEventListener('click', function() {
+                API.refresh();
+            });
+
+            // Выход
+            DOM.logoutBtn.addEventListener('click', function() {
+                API.logout();
+            });
+
+            // ============================================================
+            // СЕССИЯ АДМИНА
+            // ============================================================
+            (function checkSession() {
+                if (localStorage.getItem('admin_session') !== 'authenticated') {
+                    const pwd = prompt('Введите пароль администратора:');
+                    if (pwd === 'admin123') {
+                        localStorage.setItem('admin_session', 'authenticated');
+                    } else {
+                        alert('Неверный пароль!');
+                        window.location.href = 'index.html';
+                    }
+                }
+            })();
+
+            // ============================================================
+            // ИНИЦИАЛИЗАЦИЯ
+            // ============================================================
+            window.API = API;
+            loadAllData();
+            console.log('🔐 Админ-панель загружена');
+
+        })();
+    </script>
+
+</body>
+</html>
